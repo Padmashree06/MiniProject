@@ -18,3 +18,8 @@ app.get('/', (req,res) => {
 app.listen(port, () => {
     console.log(`My SQL app listening on http://localhost:${port}`)
 });
+fetch('https://jsonplaceholder.typicode.com/users')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+  });
