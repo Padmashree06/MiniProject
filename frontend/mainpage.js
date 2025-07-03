@@ -153,10 +153,10 @@ form.addEventListener('submit', (e) => {
         }
 
         const columnsSql = columns.map(col => `${col.name} ${col.type}`).join(', ');
-        const sqlCommand = `CREATE TABLE IF NOT EXISTS ${data.tableName} (${columnsSql})`;
+        const sqlCommand = `CREATE TABLE ${data.tableName} (${columnsSql})`;
         
-        // Display SQL command immediately
         displaySQLCommand(sqlCommand);
+
 
         fetch('/create', {
             method: 'POST',
@@ -253,9 +253,9 @@ form.addEventListener('submit', (e) => {
             return;
     }
 
-    // Display the SQL command IMMEDIATELY before executing
-    displaySQLCommand(sqlCommand);
 
+    // Display the SQL command IMMEDIATELY before executing - with delay to ensure DOM is ready
+        displaySQLCommand(sqlCommand);
     fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -349,15 +349,18 @@ async function loadTableData(tableName) {
 
         displayTableData(data, tableName);
 
+
+
     } catch (err) {
         console.error("Fetch failed:", err);
         container.innerHTML = `<div style="color: beige; text-align: center; padding: 20px;">
             <h4>Table: ${tableName}</h4>
-            <p>Error loading table: ${err.message}</p>
         </div>`;
         
+
         // Update SQL command to show error
         displaySQLCommand(`SELECT * FROM ${tableName} -- Error: ${err.message}`);
+
     }
 }
 
@@ -491,7 +494,8 @@ function importCSV() {
             const columnsSql = columns.map(col => `${col.name} ${col.type}`).join(', ');
             const createCommand = `CREATE TABLE IF NOT EXISTS ${tableName} (${columnsSql}) -- Importing CSV`;
             
-            displaySQLCommand(createCommand);
+            displaySQLCommand(`CREATE TABLE ${tableName} (${columnsSql}) -- (Importing CSV)`);
+          
 
             // Create table first
             const createRes = await fetch('/create', {
