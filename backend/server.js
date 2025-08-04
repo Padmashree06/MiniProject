@@ -8,7 +8,6 @@ const db = new sqlite3.Database('./gui_rdbms.db');
 const app = express();
 const port = 3000;
 
-// Fix for __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -19,12 +18,10 @@ app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, '../frontend/landing.html'));
 });
 
-// Send mock students data (fallback)
 app.get('/students', (req, res) => {
     res.json(students);
 });
 
-// Get all tables in database
 app.get('/tables', (req, res) => {
     const query = `SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'`;
     db.all(query, (err, tables) => {
@@ -33,7 +30,6 @@ app.get('/tables', (req, res) => {
     });
 });
 
-// Create Table
 app.post('/create', (req, res) => {
     const { tableName, columns } = req.body;
 
@@ -53,7 +49,6 @@ app.post('/create', (req, res) => {
     });
 });
 
-// Insert Row
 app.post('/insert', (req, res) => {
     const { tableName, columns, values } = req.body;
 
@@ -68,7 +63,6 @@ app.post('/insert', (req, res) => {
     });
 });
 
-// Select Query
 app.post('/select', (req, res) => {
     const { tableName, where } = req.body;
     
@@ -84,7 +78,6 @@ app.post('/select', (req, res) => {
     });
 });
 
-// Update
 app.post('/update', (req, res) => {
     const { tableName, set, where } = req.body;
     const query = `UPDATE \`${tableName}\` SET ${set} WHERE ${where}`;
@@ -95,7 +88,6 @@ app.post('/update', (req, res) => {
     });
 });
 
-// Delete
 app.post('/delete', (req, res) => {
     const { tableName, where } = req.body;
     const query = `DELETE FROM \`${tableName}\` WHERE ${where}`;
@@ -106,7 +98,6 @@ app.post('/delete', (req, res) => {
     });
 });
 
-// Drop Table
 app.post('/drop', (req, res) => {
     const { tableName } = req.body;
     const query = `DROP TABLE IF EXISTS \`${tableName}\``;
@@ -117,7 +108,6 @@ app.post('/drop', (req, res) => {
     });
 });
 
-// Alter Table
 app.post('/alter', (req, res) => {
     const { tableName, command } = req.body;
     const query = `ALTER TABLE \`${tableName}\` ${command}`;
@@ -128,7 +118,6 @@ app.post('/alter', (req, res) => {
     });
 });
 
-// Start server
 app.listen(port, () => {
     console.log(`My SQL app listening on http://localhost:${port}`);
 });
